@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   bool _hasPermission = false;
+  List<SongModel> songdata = [];
 
   @override
   void initState() {
@@ -86,16 +87,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else {
+              for (var element in snapshot.data!) {
+                bool checkMusic = element.isMusic ?? false;
+                if (checkMusic) {
+                  songdata.add(element);
+                }
+              }
+
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data!.length,
+                  itemCount: songdata.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => const PlayerScreen());
-                        // controller.playSong(snapshot.data![index].uri, index);
+                        Get.to(() => PlayerScreen(
+                              data: songdata,
+                            ));
+                        controller.playSong(songdata[index].uri, index);
                       },
                       child: Card(
                         elevation: 8,
@@ -124,7 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 child: QueryArtworkWidget(
                                   controller: _audioQuery,
-                                  id: snapshot.data![index].id,
+                                  // id: snapshot.data![index].id,
+                                  id: songdata[index].id,
                                   type: ArtworkType.AUDIO,
                                   nullArtworkWidget: const Icon(
                                     Icons.music_note,
@@ -141,7 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     const SizedBox(height: 3),
                                     Text(
-                                      snapshot.data![index].displayNameWOExt,
+                                      // snapshot.data![index].displayNameWOExt,
+                                      songdata[index].displayNameWOExt,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         color: darkColor,
@@ -150,7 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      "${snapshot.data![index].artist}",
+                                      // "${snapshot.data![index].artist}",
+                                      "${songdata[index].artist}",
                                       style: TextStyle(
                                         color: darkColor.withOpacity(0.5),
                                         fontSize: 15,
@@ -162,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               const Spacer(),
                               Align(
                                 alignment: Alignment.center,
-                                child: controller.playIndex == index &&
+                                child: controller.playIndex.value == index &&
                                         controller.isPlaying.value
                                     ? Icon(
                                         Icons.pause_circle,
