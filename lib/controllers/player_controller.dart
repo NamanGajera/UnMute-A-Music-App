@@ -4,7 +4,7 @@ import 'package:just_audio/just_audio.dart';
 
 class PlayerController extends GetxController {
   final audioPlayer = AudioPlayer();
-  var playIndex = 0.obs;
+  var playIndex = (-1).obs;
   RxBool isPlaying = false.obs;
   var duration = ''.obs;
   var position = ''.obs;
