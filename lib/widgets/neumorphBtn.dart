@@ -33,15 +33,15 @@ class NeumorphismBtn extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: colors == null ? bgColor : colors![1],
+        color: colors == null ? lightColor1 : colors![1],
         boxShadow: [
           BoxShadow(
-            color: white,
+            color: white.withOpacity(0.8),
             blurRadius: blur,
             offset: Offset(-distance, -distance),
           ),
           BoxShadow(
-            color: whiteDark,
+            color: whiteDark.withOpacity(0.8),
             blurRadius: 20,
             offset: Offset(distance, distance),
           ),
@@ -61,10 +61,10 @@ class NeumorphismBtn extends StatelessWidget {
                       end: Alignment.bottomRight,
                       colors: colors ??
                           [
-                            white,
-                            bgDark,
+                            lightColor1,
+                            primaryColor1,
                           ]),
-                  color: bgColor,
+                  color: lightColor1,
                 ),
                 child: child,
               ),
